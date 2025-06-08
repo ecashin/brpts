@@ -1,5 +1,3 @@
-use std::fmt;
-
 use leptos::mount::mount_to_body;
 use leptos::prelude::*;
 use rand::{rng, seq::SliceRandom};
@@ -33,33 +31,6 @@ const N_PLAYER: usize = 13;
 struct Card {
     rank: usize,
     suit: usize,
-}
-
-impl Card {
-    fn suit_repr(&self) -> Option<String> {
-        SUIT_CODE
-            .iter()
-            .find(|(code, _)| *code == self.suit)
-            .map(|(_, repr)| repr.to_string())
-    }
-
-    fn rank_repr(&self) -> Option<String> {
-        RANK_CODE
-            .iter()
-            .find(|(code, _)| *code == self.rank)
-            .map(|(_, repr)| repr.to_string())
-    }
-}
-
-impl fmt::Display for Card {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(
-            f,
-            "{}{}",
-            self.rank_repr().unwrap(),
-            self.suit_repr().unwrap()
-        )
-    }
 }
 
 fn new_deck() -> Vec<Card> {
