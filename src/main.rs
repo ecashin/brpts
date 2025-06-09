@@ -238,6 +238,14 @@ fn App() -> impl IntoView {
     };
 
     view! {
+        <div  style="float: right">
+            <p>
+                <a href="https://github.com/ecashin/brpts">Source Code</a>
+            </p>
+            <p>
+                <a href="https://en.wikipedia.org/wiki/Hand_evaluation">For hand evaluation</a>
+            </p>
+        </div>
         {reveal_button}
         {card_display}
         <dl>
