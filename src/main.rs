@@ -147,32 +147,35 @@ fn short_suit_points(cards: &[Card]) -> usize {
 fn App() -> impl IntoView {
     let (cards, set_cards) = signal(new_hand());
     let (hide, set_hide) = signal(true);
-    let fcp = {
-        move || {
-            if hide.get() {
-                None
-            } else {
-                Some(view! {
-                    <dt>
-                        {"Face Card Points"}
-                    </dt>
-                    <dd>
-                        {face_card_points(&cards.get())}
-                    </dd>
-                })
-            }
+    let (points, set_points) = signal(0);
+    let fcp = move || {
+        if hide.get() {
+            None
+        } else {
+            let fcp = face_card_points(&cards.get());
+            set_points.update(|points: &mut usize| *points += fcp);
+            Some(view! {
+                <dt>
+                    {"Face Card Points"}
+                </dt>
+                <dd>
+                    {fcp}
+                </dd>
+            })
         }
     };
     let long_suit_points = move || {
         if hide.get() {
             None
         } else {
+            let lsp = long_suit_points(&cards.get());
+            set_points.update(|points: &mut usize| *points += lsp);
             Some(view! {
                 <dt>
                     {"Long Suit Points"}
                 </dt>
                 <dd>
-                    {long_suit_points(&cards.get())}
+                    {lsp}
                 </dd>
             })
         }
@@ -181,43 +184,54 @@ fn App() -> impl IntoView {
         if hide.get() {
             None
         } else {
+            let ssp = short_suit_points(&cards.get());
+            set_points.update(|points: &mut usize| *points += ssp);
             Some(view! {
                 <dt>
                     {"Short Suit Points"}
                 </dt>
                 <dd>
-                    {short_suit_points(&cards.get())}
+                    {ssp}
                 </dd>
             })
         }
     };
-    let card_display = {
-        move || {
-            view! {
-                <p>
-                    {hand_repr(&cards.get())}
-                </p>
-            }
+    let total_points = move || {
+        if hide.get() {
+            None
+        } else {
+            let total = points.get();
+            Some(view! {
+                <dt>
+                    {"total"}
+                </dt>
+                <dd>
+                    {total}
+                </dd>
+            })
         }
     };
-    let reveal_button = {
-        let hide = hide.clone();
-        let set_hide = set_hide.clone();
-        let set_cards = set_cards.clone();
-        move || {
-            let text = if hide.get() { "reveal" } else { "next hand" };
-            view! {
-                <button
-                    on:click=move |_| {
-                        if !hide.get() {
-                            set_cards.set(new_hand())
-                        }
-                        set_hide.set(!hide.get());
+    let card_display = move || {
+        view! {
+            <p>
+                {hand_repr(&cards.get())}
+            </p>
+        }
+    };
+    let reveal_button = move || {
+        let text = if hide.get() { "reveal" } else { "next hand" };
+        view! {
+            <button
+                on:click=move |_| {
+                    if !hide.get() {
+                        set_cards.set(new_hand());
+                        set_points.set(0);
                     }
-                >
-                    {text}
-                </button>
-            }
+                    set_hide.set(!hide.get());
+                }
+            >
+                {text}
+            </button>
         }
     };
 
@@ -228,6 +242,7 @@ fn App() -> impl IntoView {
             {fcp}
             {long_suit_points}
             {short_suit_points}
+            {total_points}
         </dl>
     }
 }
