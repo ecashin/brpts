@@ -120,11 +120,25 @@ fn new_hand() -> Vec<Card> {
     sorted
 }
 
-fn suit_length_points(cards: &[Card]) -> usize {
+fn long_suit_points(cards: &[Card]) -> usize {
     let mut points = 0;
     for suit in suit_codes() {
         let len: usize = cards.iter().filter(|c| c.suit == suit).map(|_| 1).sum();
         points += len.saturating_sub(4);
+    }
+    points
+}
+
+fn short_suit_points(cards: &[Card]) -> usize {
+    let mut points = 0;
+    for suit in suit_codes() {
+        let len: usize = cards.iter().filter(|c| c.suit == suit).map(|_| 1).sum();
+        points += match len {
+            2 => 1,
+            1 => 2,
+            0 => 3,
+            _ => 0,
+        };
     }
     points
 }
@@ -149,16 +163,30 @@ fn App() -> impl IntoView {
             }
         }
     };
-    let suit_length_points = move || {
+    let long_suit_points = move || {
         if hide.get() {
             None
         } else {
             Some(view! {
                 <dt>
-                    {"Suit Length Points"}
+                    {"Long Suit Points"}
                 </dt>
                 <dd>
-                    {suit_length_points(&cards.get())}
+                    {long_suit_points(&cards.get())}
+                </dd>
+            })
+        }
+    };
+    let short_suit_points = move || {
+        if hide.get() {
+            None
+        } else {
+            Some(view! {
+                <dt>
+                    {"Short Suit Points"}
+                </dt>
+                <dd>
+                    {short_suit_points(&cards.get())}
                 </dd>
             })
         }
@@ -198,7 +226,8 @@ fn App() -> impl IntoView {
         {card_display}
         <dl>
             {fcp}
-            {suit_length_points}
+            {long_suit_points}
+            {short_suit_points}
         </dl>
     }
 }
