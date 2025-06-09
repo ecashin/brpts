@@ -4,8 +4,6 @@ This web app was created after learning as little as possible
 about the [leptos](https://book.leptos.dev/view/06_control_flow.html)
 web framework.
 
-Only face-card points (FCP) are implemented now.
-
 There is a live version online here:
 
 [Bridge Points Drill](https://ecashin.github.io/brpts/)
