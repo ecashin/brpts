@@ -120,6 +120,15 @@ fn new_hand() -> Vec<Card> {
     sorted
 }
 
+fn suit_length_points(cards: &[Card]) -> usize {
+    let mut points = 0;
+    for suit in suit_codes() {
+        let len: usize = cards.iter().filter(|c| c.suit == suit).map(|_| 1).sum();
+        points += len.saturating_sub(4);
+    }
+    points
+}
+
 #[component]
 fn App() -> impl IntoView {
     let (cards, set_cards) = signal(new_hand());
@@ -138,6 +147,20 @@ fn App() -> impl IntoView {
                     </dd>
                 })
             }
+        }
+    };
+    let suit_length_points = move || {
+        if hide.get() {
+            None
+        } else {
+            Some(view! {
+                <dt>
+                    {"Suit Length Points"}
+                </dt>
+                <dd>
+                    {suit_length_points(&cards.get())}
+                </dd>
+            })
         }
     };
     let card_display = {
@@ -175,6 +198,7 @@ fn App() -> impl IntoView {
         {card_display}
         <dl>
             {fcp}
+            {suit_length_points}
         </dl>
     }
 }
