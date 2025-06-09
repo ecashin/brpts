@@ -1,3 +1,5 @@
+use std::fmt;
+
 use leptos::mount::mount_to_body;
 use leptos::prelude::*;
 use rand::{rng, seq::SliceRandom};
@@ -11,7 +13,7 @@ const RANK_CODE: [(usize, &str); 13] = [
     (7, "7"),
     (8, "8"),
     (9, "9"),
-    (10, "10"),
+    (10, "\u{2789}"), // circled 10
     (11, "J"),
     (12, "Q"),
     (13, "K"),
@@ -250,4 +252,14 @@ fn App() -> impl IntoView {
 fn main() {
     console_error_panic_hook::set_once();
     mount_to_body(App)
+}
+
+#[cfg(test)]
+mod test {
+    use crate::rank_repr;
+
+    #[test]
+    fn test_ten_repr() {
+        assert_eq!(rank_repr(10), "\u{2469}");
+    }
 }
