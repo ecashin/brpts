@@ -203,7 +203,7 @@ fn App() -> impl IntoView {
             let total = points.get();
             Some(view! {
                 <dt>
-                    {"total"}
+                    {"Total"}
                 </dt>
                 <dd>
                     {total}
