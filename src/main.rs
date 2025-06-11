@@ -1,5 +1,5 @@
-use leptos::mount::mount_to_body;
 use leptos::prelude::*;
+use leptos::{logging, mount::mount_to_body};
 use rand::{rng, seq::SliceRandom};
 
 const RANK_CODE: [(usize, &str); 13] = [
@@ -144,7 +144,6 @@ fn short_suit_points(cards: &[Card]) -> usize {
 }
 
 #[component]
-// fn PointsRow(label: String, #[prop(into)] points: Signal<usize>) -> impl IntoView {
 fn PointsRow(label: String, #[prop(into)] points: usize) -> impl IntoView {
     view! {
         <tr>
@@ -196,6 +195,7 @@ fn App() -> impl IntoView {
     };
     let reveal_button = move || {
         let text = if hide.get() { "reveal" } else { "next hand" };
+        logging::log!("rendering with hide: {}", hide.get());
         view! {
             <button
                 on:click=move |_| {
