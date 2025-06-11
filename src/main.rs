@@ -1,5 +1,3 @@
-use std::fmt;
-
 use leptos::mount::mount_to_body;
 use leptos::prelude::*;
 use rand::{rng, seq::SliceRandom};
@@ -146,71 +144,44 @@ fn short_suit_points(cards: &[Card]) -> usize {
 }
 
 #[component]
+// fn PointsRow(label: String, #[prop(into)] points: Signal<usize>) -> impl IntoView {
+fn PointsRow(label: String, #[prop(into)] points: usize) -> impl IntoView {
+    view! {
+        <tr>
+            <td>{label}</td>
+            <td>{points}</td>
+        </tr>
+    }
+}
+
+#[component]
 fn App() -> impl IntoView {
     let (cards, set_cards) = signal(new_hand());
     let (hide, set_hide) = signal(true);
-    let (points, set_points) = signal(0);
     let fcp = move || {
-        if hide.get() {
-            None
-        } else {
-            let fcp = face_card_points(&cards.get());
-            set_points.update(|points: &mut usize| *points += fcp);
-            Some(view! {
-                <dt>
-                    {"Face Card Points"}
-                </dt>
-                <dd>
-                    {fcp}
-                </dd>
-            })
+        view! {
+            <PointsRow label={"Face Card Points".to_string()} points=face_card_points(&cards.get())
+            />
         }
     };
-    let long_suit_points = move || {
-        if hide.get() {
-            None
-        } else {
-            let lsp = long_suit_points(&cards.get());
-            set_points.update(|points: &mut usize| *points += lsp);
-            Some(view! {
-                <dt>
-                    {"Long Suit Points"}
-                </dt>
-                <dd>
-                    {lsp}
-                </dd>
-            })
+    let lsp = move || {
+        view! {
+            <PointsRow label={"Long Suit Points".to_string()} points=long_suit_points(&cards.get())
+            />
         }
     };
-    let short_suit_points = move || {
-        if hide.get() {
-            None
-        } else {
-            let ssp = short_suit_points(&cards.get());
-            set_points.update(|points: &mut usize| *points += ssp);
-            Some(view! {
-                <dt>
-                    {"Short Suit Points"}
-                </dt>
-                <dd>
-                    {ssp}
-                </dd>
-            })
+    let ssp = move || {
+        view! {
+            <PointsRow label={"Short Suit Points".to_string()} points=short_suit_points(&cards.get())
+            />
         }
     };
     let total_points = move || {
-        if hide.get() {
-            None
-        } else {
-            let total = points.get();
-            Some(view! {
-                <dt>
-                    {"Total"}
-                </dt>
-                <dd>
-                    {total}
-                </dd>
-            })
+        view! {
+            <PointsRow label={"Total".to_string()} points={
+                face_card_points(&cards.get()) + long_suit_points(&cards.get()) + short_suit_points(&cards.get())
+            }
+            />
         }
     };
     let card_display = move || {
@@ -227,7 +198,6 @@ fn App() -> impl IntoView {
                 on:click=move |_| {
                     if !hide.get() {
                         set_cards.set(new_hand());
-                        set_points.set(0);
                     }
                     set_hide.set(!hide.get());
                 }
@@ -240,20 +210,21 @@ fn App() -> impl IntoView {
     view! {
         <div  style="float: right">
             <p>
-                <a href="https://github.com/ecashin/brpts">Source Code</a>
+                <a href="https://github.com/ecashin/brpts">source code</a>
             </p>
             <p>
-                <a href="https://en.wikipedia.org/wiki/Hand_evaluation">For hand evaluation</a>
+                <a href="https://en.wikipedia.org/wiki/Hand_evaluation">info on hand evaluation</a>
             </p>
         </div>
         {reveal_button}
         {card_display}
-        <dl>
+        <table class:hidden=move || hide.get()
+        >
             {fcp}
-            {long_suit_points}
-            {short_suit_points}
+            {lsp}
+            {ssp}
             {total_points}
-        </dl>
+        </table>
     }
 }
 

@@ -1,6 +1,6 @@
 # Half-Hearted Bridge Points Drill
 
-This web app was created after learning as little as possible
+This web app was created after learning just a little
 about the [leptos](https://book.leptos.dev/view/06_control_flow.html)
 web framework.
 
@@ -16,10 +16,4 @@ run as shown below.
 
     RUSTFLAGS='--cfg getrandom_backend="wasm_js"' trunk serve --open
 
-## About Half-Heartedness
-
-I think leptos looks great so far, but right now I'm more interested in using this app
-than making a leptos app that is conventional and that looks nice.
-Calling this web app "half hearted" is my way of acknowledging
-that I have a lot to learn about leptos but haven't tried learning it yet.
 
