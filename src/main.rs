@@ -158,28 +158,31 @@ fn PointsRow(label: String, #[prop(into)] points: usize) -> impl IntoView {
 fn App() -> impl IntoView {
     let (cards, set_cards) = signal(new_hand());
     let (hide, set_hide) = signal(true);
+    let fc_pts = Memo::new(move |_| face_card_points(&cards.get()));
+    let ls_pts = Memo::new(move |_| long_suit_points(&cards.get()));
+    let ss_pts = Memo::new(move |_| short_suit_points(&cards.get()));
     let fcp = move || {
         view! {
-            <PointsRow label={"Face Card Points".to_string()} points=face_card_points(&cards.get())
+            <PointsRow label={"Face Card Points".to_string()} points=fc_pts.get()
             />
         }
     };
     let lsp = move || {
         view! {
-            <PointsRow label={"Long Suit Points".to_string()} points=long_suit_points(&cards.get())
+            <PointsRow label={"Long Suit Points".to_string()} points=ls_pts.get()
             />
         }
     };
     let ssp = move || {
         view! {
-            <PointsRow label={"Short Suit Points".to_string()} points=short_suit_points(&cards.get())
+            <PointsRow label={"Short Suit Points".to_string()} points=ss_pts.get()
             />
         }
     };
     let total_points = move || {
         view! {
             <PointsRow label={"Total".to_string()} points={
-                face_card_points(&cards.get()) + long_suit_points(&cards.get()) + short_suit_points(&cards.get())
+                fc_pts.get() + ls_pts.get() + ss_pts.get()
             }
             />
         }
