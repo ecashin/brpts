@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html>
-  <head><link rel="modulepreload" href="./brpts-4f9df8fcd39fac34.js" crossorigin="anonymous" integrity="sha384-H7u/gECxl/G2eBOBz0u1qxG0/BhMfkpDTfdhjySaraMBMd+4gyUoksBEwTOGfR3O"><link rel="preload" href="./brpts-4f9df8fcd39fac34_bg.wasm" crossorigin="anonymous" integrity="sha384-6Ma3LAsKpBUZy88vuhb4Ez9ohvNqys4ywDgr8es1b50bugT24/OUArst4Q8LSqN1" as="fetch" type="application/wasm"></head>
+  <head>
+  <style>
+  td:nth-child(2) { text-align: right; }
+  table.hidden { visibility: hidden; }
+  body { background-color: rgb(242, 230, 241) }
+  </style>
+  <link rel="modulepreload" href="./brpts-8ae3fbbd588ddd13.js" crossorigin="anonymous" integrity="sha384-Uuu0J6+AV/Ud+vfD7DVZ57SJ6ZlaGVuDpUDtmgoAXs8wSKC8PtkVHZSOkwDqlD5H"><link rel="preload" href="./brpts-8ae3fbbd588ddd13_bg.wasm" crossorigin="anonymous" integrity="sha384-178CcWXevbVlQnFiJDjlQ/1w/KZ05lnspH1hwplwDPHX3s+q3kDI/CjaNe2Rz7W5" as="fetch" type="application/wasm"></head>
   <body>
 <script type="module">
-import init, * as bindings from './brpts-4f9df8fcd39fac34.js';
-const wasm = await init({ module_or_path: './brpts-4f9df8fcd39fac34_bg.wasm' });
+import init, * as bindings from './brpts-8ae3fbbd588ddd13.js';
+const wasm = await init({ module_or_path: './brpts-8ae3fbbd588ddd13_bg.wasm' });
 
 
 window.wasmBindings = bindings;
